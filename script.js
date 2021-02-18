@@ -55,7 +55,6 @@ operators.forEach(sign => {
         operatorPressed = true;
         currentOperator = operator;
         operator = sign.value;
-        console.log(operator)
         if (!num2) {
             return;
         }
@@ -88,8 +87,11 @@ del.onclick = () => {
         num1 = result.toString();
     }
     if (!num2) {
-        num1 = num1.slice(0,-1);
+        num1 = num1.slice(0,-1); 
         display.textContent = +num1;
+        if (!num1){
+            num1 = '0';
+        }
         return;
     }
     num2 = num2.slice(0,-1);
