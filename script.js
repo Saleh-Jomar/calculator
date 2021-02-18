@@ -10,7 +10,7 @@ const equals = document.querySelector('#equals');
 const reset = document.querySelector('#reset');
 const del = document.querySelector('#delete');
 const dec = document.querySelector('#decimal')
-display.textContent = num1;
+display.textContent = +num1;
 
 function add(a, b) {
     return a + b;
@@ -71,7 +71,7 @@ operators.forEach(sign => {
         operatorPressed = true;
         currentOperator = operator;
         operator = sign.value;
-        if (!num2) {
+        if (!num2||Number.isNaN(+num2)) {
             return;
         }
         num1 = round(operate(currentOperator),precisionGetter());
@@ -81,7 +81,7 @@ operators.forEach(sign => {
     })
 })
 equals.onclick = () => {
-    if (!num2) {
+    if (!num2||Number.isNaN(+num2)) {
         return;
     }
     result = round(operate(operator),precisionGetter());
@@ -97,7 +97,7 @@ reset.onclick = () => {
     num1 = '0';
     num2 = '';
     operatorPressed = false;
-    display.textContent = num1;
+    display.textContent = +num1;
 }
 del.onclick = () => {
     if (!num1) {
