@@ -9,6 +9,7 @@ const display = document.querySelector('.display');
 const equals = document.querySelector('#equals');
 const reset = document.querySelector('#reset');
 const del = document.querySelector('#delete');
+const dec = document.querySelector('#decimal')
 display.textContent = num1;
 
 function add(a, b) {
@@ -35,6 +36,21 @@ function operate(operator) {
             return multiply(+num1, +num2);
     }
 }
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+function precisionGetter () {
+    prec1 = 0;
+    prec2 = 0;
+    if (num1.indexOf(dec.value)!=-1){
+        prec1 = num1.length - 1 - num1.indexOf(dec.value);
+    }
+    if (num2.indexOf(dec.value)!=-1){
+        prec2 = num2.length - 1 - num2.indexOf(dec.value);
+    }
+    return prec1 > prec2 ? prec1 : prec2;
+}
 
 numbers.forEach(number => {
     number.addEventListener('click', () => {
@@ -58,7 +74,7 @@ operators.forEach(sign => {
         if (!num2) {
             return;
         }
-        num1 = operate(currentOperator);
+        num1 = round(operate(currentOperator),precisionGetter());
         num1 = num1.toString();
         display.textContent = num1;
         num2 = '';
@@ -68,8 +84,9 @@ equals.onclick = () => {
     if (!num2) {
         return;
     }
-    result = operate(operator);
-    display.textContent = result;
+    result = round(operate(operator),precisionGetter());
+    result = result.toString();
+    display.textContent = result
     num1 = ''
     num2 = ''
     operatorPressed = false;
@@ -84,16 +101,39 @@ reset.onclick = () => {
 }
 del.onclick = () => {
     if (!num1) {
-        num1 = result.toString();
+        return;
     }
-    if (!num2) {
-        num1 = num1.slice(0,-1); 
+    if (!operatorPressed) {
+        num1 = num1.slice(0, -1);
         display.textContent = +num1;
-        if (!num1){
+        if (num1.indexOf(dec.value)!==-1){
+            display.textContent = num1;
+        }
+        if (!num1) {
             num1 = '0';
         }
         return;
     }
-    num2 = num2.slice(0,-1);
+    num2 = num2.slice(0, -1);
     display.textContent = +num2;
+    if (!num2) {
+        num2 = '0';
+    }
+    if (num2.indexOf(dec.value)!==-1){
+        display.textContent = num1;
+    }
+}
+dec.onclick = () => {
+    if (!operatorPressed && num1.indexOf(dec.value)==-1){
+        num1 += dec.value;
+        if (num1[0]=='0'){
+            num1 = num1.slice(1);
+        }
+        display.textContent = num1;
+        return;
+    }
+    if (operatorPressed && num2.indexOf(dec.value) == -1) {
+        num2 += dec.value;
+        display.textContent = num2;
+    }
 }
