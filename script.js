@@ -8,6 +8,7 @@ const numbers = document.querySelectorAll('.number-button');
 const display = document.querySelector('.display');
 const equals = document.querySelector('#equals');
 const reset = document.querySelector('#reset');
+const del = document.querySelector('#delete');
 display.textContent = num1;
 
 function add(a, b) {
@@ -22,9 +23,6 @@ function multiply(a, b) {
 function divide(a, b) {
     return a / b;
 }
-function mod(a, b) {
-    return a % b;
-}
 function operate(operator) {
     switch (operator) {
         case 'add':
@@ -35,8 +33,6 @@ function operate(operator) {
             return divide(+num1, +num2);
         case 'multiply':
             return multiply(+num1, +num2);
-        case 'mod':
-            return mod(+num1, +num2);
     }
 }
 
@@ -64,6 +60,7 @@ operators.forEach(sign => {
             return;
         }
         num1 = operate(currentOperator);
+        num1 = num1.toString();
         display.textContent = num1;
         num2 = '';
     })
@@ -85,4 +82,16 @@ reset.onclick = () => {
     num2 = '';
     operatorPressed = false;
     display.textContent = num1;
+}
+del.onclick = () => {
+    if (!num1) {
+        num1 = result.toString();
+    }
+    if (!num2) {
+        num1 = num1.slice(0,-1);
+        display.textContent = +num1;
+        return;
+    }
+    num2 = num2.slice(0,-1);
+    display.textContent = +num2;
 }
