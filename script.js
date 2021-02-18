@@ -120,7 +120,7 @@ del.onclick = () => {
         num2 = '0';
     }
     if (num2.indexOf(dec.value)!==-1){
-        display.textContent = num1;
+        display.textContent = num2;
     }
 }
 dec.onclick = () => {
