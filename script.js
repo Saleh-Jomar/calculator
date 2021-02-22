@@ -2,7 +2,7 @@ let num1, num2, operator, operatorPressed, result
 operator = '';
 num1 = '';
 num2 = '';
-result = '0';
+result = '';
 operatorPressed = false;
 const operators = document.querySelectorAll('.operators');
 const numbers = document.querySelectorAll('.number-button');
@@ -57,19 +57,22 @@ function precisionGetter() {
 numbers.forEach(number => {
     number.addEventListener('click', () => {
         if (!operatorPressed) {
-            num1 += number.value;
-            display.textContent = num1;
+            if (num1.length < 8) {
+                num1 += number.value;
+                display.textContent = num1;
+            }
             return;
         }
-        num2 += number.value;
-        display.textContent = num2;
+        if (num2.length < 8) {
+            num2 += number.value;
+            display.textContent = num2;
+        }
     });
 })
 operators.forEach(sign => {
     sign.addEventListener('click', () => {
         if (!num1) {
             num1 = result;
-            display.textContent = num1;
         }
         if (Number.isNaN(+num1)) {
             return;
@@ -82,8 +85,14 @@ operators.forEach(sign => {
         }
         num1 = round(operate(currentOperator), precisionGetter());
         num1 = num1.toString();
-        display.textContent = num1;
         num2 = '';
+        if (Number.isNaN(+num1)){
+            display.textContent = 'ERROR';
+            num1='';
+            operatorPressed = false;
+            return;
+        }
+        display.textContent = num1;        
     })
 })
 equals.onclick = () => {
@@ -92,17 +101,22 @@ equals.onclick = () => {
     }
     result = round(operate(operator), precisionGetter());
     result = result.toString();
-    display.textContent = result
     num1 = ''
     num2 = ''
     operatorPressed = false;
+    if (Number.isNaN(+result)){
+        display.textContent = 'ERROR';
+        result='';
+        return;
+    }
+    display.textContent = result;    
 }
 
 reset.onclick = () => {
     operator = '';
     num1 = '';
     num2 = '';
-    result = '0';
+    result = '';
     operatorPressed = false;
     display.innerHTML = '&nbsp;';
 }
@@ -118,7 +132,7 @@ del.onclick = () => {
         }
         return;
     }
-    if (!num2){
+    if (!num2) {
         return;
     }
     num2 = num2.slice(0, -1);
@@ -126,7 +140,7 @@ del.onclick = () => {
     if (!num2) {
         display.innerHTML = '&nbsp;';
     }
-    
+
 }
 dec.onclick = () => {
     if (!operatorPressed && num1.indexOf(dec.value) == -1) {
@@ -141,19 +155,19 @@ dec.onclick = () => {
 }
 sign.onclick = () => {
     switch (true) {
-        case num1&&!operatorPressed && num1.indexOf(sign.value)==-1:
+        case num1 && !operatorPressed && num1.indexOf(sign.value) == -1:
             num1 = sign.value + num1;
             display.textContent = num1;
             break;
-        case num1&&!operatorPressed && num1.indexOf(sign.value)!=-1:
+        case num1 && !operatorPressed && num1.indexOf(sign.value) != -1:
             num1 = num1.slice(1);
             display.textContent = num1;
             break;
-        case num2&&operatorPressed && num2.indexOf(dec.value) == -1 :
+        case num2 && operatorPressed && num2.indexOf(dec.value) == -1:
             num2 = sign.value + num2;
             display.textContent = num2;
             break;
-        case num2&&operatorPressed && num2.indexOf(dec.value) != -1:
+        case num2 && operatorPressed && num2.indexOf(dec.value) != -1:
             num2 = num2.slice(1);
             display.textContent = num2;
             break;
