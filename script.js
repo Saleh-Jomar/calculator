@@ -67,15 +67,14 @@ numbers.forEach(number => {
 })
 operators.forEach(sign => {
     sign.addEventListener('click', () => {
-        operatorPressed = true;
         if (!num1) {
             num1 = result;
             display.textContent = num1;
         }
         if (Number.isNaN(+num1)) {
-            operatorPressed = false;
             return;
         }
+        operatorPressed = true;
         currentOperator = operator;
         operator = sign.value;
         if (!num2 || Number.isNaN(+num2)) {
